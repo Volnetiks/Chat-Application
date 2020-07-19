@@ -16,24 +16,25 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          Center(
-            child: FlatButton(
-              padding: EdgeInsets.all(35),
-              child: Text("Login",
-              style: TextStyle(
-                fontSize: 35,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 1.2
-              ),),
-              onPressed: () => performLogin(),
-            ),
-          ),
-          isLogin ? Center(child: CircularProgressIndicator()) : Container()
-        ],
-      )
-    );
+        body: Stack(
+      children: <Widget>[
+        isLogin
+            ? Center(child: CircularProgressIndicator())
+            : Center(
+                child: FlatButton(
+                  padding: EdgeInsets.all(35),
+                  child: Text(
+                    "Login",
+                    style: TextStyle(
+                        fontSize: 35,
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 1.2),
+                  ),
+                  onPressed: () => performLogin(),
+                ),
+              ),
+      ],
+    ));
   }
 
   void performLogin() {
@@ -42,22 +43,20 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     _repository.signInWithGoogle().then((FirebaseUser user) {
-      if(user != null) {
+      if (user != null) {
         _repository.authenticateUser(user).then((isNewUser) {
-          if(isNewUser) {
+          if (isNewUser) {
             _repository.addUserToDatabase(user).then((value) {
-              Navigator.pushReplacement(context, MaterialPageRoute(
-                builder: (context) {
-                  return HomeScreen();
-                }
-              ));
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) {
+                return HomeScreen();
+              }));
             });
           } else {
-            Navigator.pushReplacement(context, MaterialPageRoute(
-                builder: (context) {
-                  return HomeScreen();
-                }
-            ));
+            Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) {
+              return HomeScreen();
+            }));
           }
         });
       }
