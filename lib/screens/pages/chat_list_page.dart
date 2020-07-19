@@ -19,7 +19,9 @@ class _ChatListPageState extends State<ChatListPage> {
     super.initState();
     _repository.getCurrentUser().then((user) {
       currentUserId = user.uid;
-      initials = Utils.getInitials(user.displayName);
+      setState(() {
+        initials = Utils.getInitials(user.displayName);
+      });
     });
   }
 
@@ -39,7 +41,9 @@ class _ChatListPageState extends State<ChatListPage> {
               Icons.search,
               color: Colors.white,
             ),
-            onPressed: () {},
+            onPressed: () {
+              Navigator.pushNamed(context, "/search_screen");
+            },
           ),
           IconButton(
             icon: Icon(
