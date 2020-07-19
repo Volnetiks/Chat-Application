@@ -34,42 +34,45 @@ class _HomeScreenState extends State<HomeScreen> {
         onPageChanged: onPageChanged,
       ),
       bottomNavigationBar: Container(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 10),
-          child: CupertinoTabBar(
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.chat,
+        child: CupertinoTabBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+                icon: Icon(Icons.chat,
+                    color: (_page == 0) ? Colors.lightBlue : Colors.grey),
+                title: Text(
+                  "Chats",
+                  style: TextStyle(
+                      fontSize: 10,
                       color: (_page == 0) ? Colors.lightBlue : Colors.grey),
-                  title: Text(
-                    "Chats",
-                    style: TextStyle(
-                        fontSize: 10,
-                        color: (_page == 0) ? Colors.lightBlue : Colors.grey),
-                  )),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.call,
+                )),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.call,
+                    color: (_page == 1) ? Colors.lightBlue : Colors.grey),
+                title: Text(
+                  "Call Logs",
+                  style: TextStyle(
+                      fontSize: 10,
                       color: (_page == 1) ? Colors.lightBlue : Colors.grey),
-                  title: Text(
-                    "Call Logs",
-                    style: TextStyle(
-                        fontSize: 10,
-                        color: (_page == 1) ? Colors.lightBlue : Colors.grey),
-                  )),
-              BottomNavigationBarItem(
-                  icon: Icon(Icons.contact_phone,
+                )),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.contact_phone,
+                    color: (_page == 2) ? Colors.lightBlue : Colors.grey),
+                title: Text(
+                  "Contacts",
+                  style: TextStyle(
+                      fontSize: 10,
                       color: (_page == 2) ? Colors.lightBlue : Colors.grey),
-                  title: Text(
-                    "Contacts",
-                    style: TextStyle(
-                        fontSize: 10,
-                        color: (_page == 2) ? Colors.lightBlue : Colors.grey),
-                  ))
-            ],
-          ),
-        ),
+                ))
+          ],
+          onTap: navigationTapped,
+          currentIndex: _page,
+        )
       ),
     );
+  }
+
+  void navigationTapped(int page) {
+    controller.jumpToPage(page);
   }
 
   void onPageChanged(int page) {
