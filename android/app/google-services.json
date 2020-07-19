@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "660636821290",
+    "firebase_url": "https://chatapplication-35db8.firebaseio.com",
+    "project_id": "chatapplication-35db8",
+    "storage_bucket": "chatapplication-35db8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:660636821290:android:dc2b0169b1f94933272053",
+        "android_client_info": {
+          "package_name": "com.volnetiks.chat_application_backend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "660636821290-kav39q84lrsa17qikrgiu410o2n3b2fo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.volnetiks.chat_application_backend",
+            "certificate_hash": "81da6713f0a5d09ad5371c8aa33b867a69bdba44"
+          }
+        },
+        {
+          "client_id": "660636821290-0g3rtujatmubqjhbviq8073gdljt76pe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGdRk4H6yDtXYHqEFs6DmmeJaHKU3LkyE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "660636821290-0g3rtujatmubqjhbviq8073gdljt76pe.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
