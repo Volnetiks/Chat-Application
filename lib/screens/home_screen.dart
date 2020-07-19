@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         ],
         onPageChanged: onPageChanged,
+        physics: NeverScrollableScrollPhysics(),
       ),
       bottomNavigationBar: Container(
         child: CupertinoTabBar(
