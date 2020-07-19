@@ -1,6 +1,7 @@
 import 'package:chat_application_backend/resources/firebase_repository.dart';
 import 'package:chat_application_backend/utils/utils.dart';
 import 'package:chat_application_backend/widgets/appBar.dart';
+import 'package:chat_application_backend/widgets/customTile.dart';
 import 'package:flutter/material.dart';
 
 class ChatListPage extends StatefulWidget {
@@ -9,7 +10,6 @@ class ChatListPage extends StatefulWidget {
 }
 
 class _ChatListPageState extends State<ChatListPage> {
-
   FirebaseRepository _repository = FirebaseRepository();
   String currentUserId, initials;
 
@@ -33,7 +33,6 @@ class _ChatListPageState extends State<ChatListPage> {
         title: UserCircle(initials),
         centerTitle: true,
         actions: <Widget>[
-
           IconButton(
             icon: Icon(
               Icons.search,
@@ -41,7 +40,6 @@ class _ChatListPageState extends State<ChatListPage> {
             ),
             onPressed: () {},
           ),
-
           IconButton(
             icon: Icon(
               Icons.settings,
@@ -49,17 +47,62 @@ class _ChatListPageState extends State<ChatListPage> {
             ),
             onPressed: () {},
           ),
-
         ],
       ),
+      floatingActionButton: NewChatButton(),
+      body: ChatListContainer(currentUserId),
+    );
+  }
+}
+
+class ChatListContainer extends StatefulWidget {
+
+  final String currentUserId;
+
+  ChatListContainer(this.currentUserId);
+
+  @override
+  _ChatListContainerState createState() => _ChatListContainerState();
+}
+
+class _ChatListContainerState extends State<ChatListContainer> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+
+      child: ListView.builder(
+        padding: EdgeInsets.all(10),
+        itemCount: 2,
+        itemBuilder: (context, index) {
+          return CustomTile();
+        },
+      ),
+
+    );
+  }
+}
+
+
+class NewChatButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.lightBlue,
+        borderRadius: BorderRadius.circular(50),
+      ),
+      child: Icon(
+        Icons.edit,
+        color: Colors.white,
+        size: 25,
+      ),
+      padding: EdgeInsets.all(15),
     );
   }
 }
 
 class UserCircle extends StatelessWidget {
-
   String text;
-
 
   UserCircle(this.text);
 
@@ -79,26 +122,20 @@ class UserCircle extends StatelessWidget {
             child: Text(
               text,
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.lightBlue,
-                fontSize: 13
-              ),
+                  fontWeight: FontWeight.bold,
+                  color: Colors.lightBlue,
+                  fontSize: 13),
             ),
           ),
-
           Align(
             alignment: Alignment.bottomRight,
             child: Container(
               height: 12,
               width: 12,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.black,
-                  width: 2
-                ),
-                color: Colors.lightGreenAccent
-              ),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.black, width: 2),
+                  color: Colors.lightGreenAccent),
             ),
           )
         ],
