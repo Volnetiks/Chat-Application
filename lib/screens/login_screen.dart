@@ -11,23 +11,36 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   FirebaseRepository _repository = FirebaseRepository();
 
+  bool isLogin = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: FlatButton(
-        padding: EdgeInsets.all(35),
-        child: Text("Login",
-        style: TextStyle(
-          fontSize: 35,
-          fontWeight: FontWeight.w900,
-          letterSpacing: 1.2
-        ),),
-        onPressed: () => performLogin(),
+      body: Stack(
+        children: <Widget>[
+          Center(
+            child: FlatButton(
+              padding: EdgeInsets.all(35),
+              child: Text("Login",
+              style: TextStyle(
+                fontSize: 35,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.2
+              ),),
+              onPressed: () => performLogin(),
+            ),
+          ),
+          isLogin ? Center(child: CircularProgressIndicator()) : Container()
+        ],
       )
     );
   }
 
   void performLogin() {
+    setState(() {
+      isLogin = true;
+    });
+
     _repository.signInWithGoogle().then((FirebaseUser user) {
       if(user != null) {
         _repository.authenticateUser(user).then((isNewUser) {

@@ -13,4 +13,6 @@ class FirebaseRepository {
 
   Future<void> addUserToDatabase(FirebaseUser user) => _firebaseMethods.addUserToDatabase(user);
 
+  Future<void> signOut() => _firebaseMethods.signOut();
+
 }
