@@ -1,4 +1,4 @@
-import 'package:chat_application_backend/screens/pages/ChatListPage.dart';
+import 'package:chat_application_backend/screens/pages/chat_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
