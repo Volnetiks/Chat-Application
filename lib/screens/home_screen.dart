@@ -1,3 +1,4 @@
+import 'package:chat_application_backend/screens/pages/ChatListPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,9 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: PageView(
         controller: controller,
         children: <Widget>[
-          Center(
-            child: Text("Chat List"),
-          ),
+          Container(child: ChatListPage()),
           Center(child: Text("Call Logs")),
           Center(
             child: Text("Contact Screen"),
