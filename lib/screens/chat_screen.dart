@@ -177,7 +177,9 @@ class _ChatScreenState extends State<ChatScreen> {
                             color: Colors.pink, shape: BoxShape.circle),
                         child: IconButton(
                           icon: Icon(Icons.send, size: 15),
-                          onPressed: () {},
+                          onPressed: () {
+                            sendMessage();
+                          },
                         ),
                       )
                     : Padding(
@@ -247,6 +249,11 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+
+  sendMessage() {
+    var text = textFieldController.text;
+
   }
 }
 
