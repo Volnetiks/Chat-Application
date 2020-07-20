@@ -1,6 +1,7 @@
 import 'package:chat_application_backend/models/user.dart';
 import 'package:chat_application_backend/resources/firebase_repository.dart';
 import 'package:chat_application_backend/widgets/appBar.dart';
+import 'package:chat_application_backend/widgets/customTile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gradient_app_bar/gradient_app_bar.dart';
@@ -65,7 +66,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 suffixIcon: IconButton(
                   icon: Icon(Icons.close, color: Colors.white),
                   onPressed: () {
-                    searchController.clear();
+                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => searchController.clear());
                   },
                 ),
                 border: InputBorder.none,
@@ -80,6 +81,51 @@ class _SearchScreenState extends State<SearchScreen> {
           ),
         ),
       ),
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 20),
+        child: buildUsersList(query)
+      ),
+    );
+  }
+
+  buildUsersList(String query) {
+    final List<User> usersList = query.isEmpty ? [] : users.where((User user) {
+      String _getUsername = user.username.toLowerCase();
+      String _getName = user.name.toLowerCase();
+      String _query = query.toLowerCase();
+      return (_getUsername.contains(_query) || _getName.contains(_query));
+    }).toList();
+
+    return ListView.builder(
+      itemCount: usersList.length,
+      itemBuilder: ((context, index) {
+        User searchedUser = User(
+          uid: usersList[index].uid,
+          profilePhoto: usersList[index].profilePhoto,
+          name: usersList[index].name,
+          username: usersList[index].username
+        );
+
+        return CustomTile(
+          mini: false,
+          onTap: () {},
+          leading: CircleAvatar(
+            backgroundImage: NetworkImage(searchedUser.profilePhoto),
+            backgroundColor: Colors.grey,
+          ),
+          title: Text(
+            searchedUser.username,
+            style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+          subtitle: Text(
+            searchedUser.name,
+            style: TextStyle(color: Colors.grey),
+          ),
+        );
+      }),
     );
   }
 }
