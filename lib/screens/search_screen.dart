@@ -73,7 +73,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 hintStyle: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 35,
-                  color: Colors.grey,
+                  color: Colors.white,
                 )
               ),
             ),
