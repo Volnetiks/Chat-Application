@@ -1,5 +1,6 @@
 import 'package:chat_application_backend/models/user.dart';
 import 'package:chat_application_backend/resources/firebase_repository.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -17,8 +18,11 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+
+    _repository.getCurrentUser().then((FirebaseUser user) {
+
+    });
   }
 
   @override
