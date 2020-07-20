@@ -1,6 +1,10 @@
+import 'package:chat_application_backend/models/message.dart';
 import 'package:chat_application_backend/models/user.dart';
+import 'package:chat_application_backend/resources/firebase_repository.dart';
 import 'package:chat_application_backend/widgets/appBar.dart';
 import 'package:chat_application_backend/widgets/customTile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -14,12 +18,33 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController textFieldController = TextEditingController();
+  FirebaseRepository _repository = FirebaseRepository();
   bool isWriting = false;
+
+  User sender;
+  String _userId;
 
   setWriting(bool val) {
     setState(() {
       isWriting = val;
     });
+  }
+
+  @override
+  void initState() {
+    _repository.getCurrentUser().then((FirebaseUser user) {
+       _userId = user.uid;
+
+       setState(() {
+         sender = User(
+           uid: user.uid,
+           name: user.displayName,
+           profilePhoto: user.photoUrl
+         );
+       });
+    });
+
+    super.initState();
   }
 
   @override
@@ -254,6 +279,19 @@ class _ChatScreenState extends State<ChatScreen> {
   sendMessage() {
     var text = textFieldController.text;
 
+    Message _message = Message(
+      receiverId: widget.receiver.uid,
+      senderId: sender.uid,
+      message: text,
+      timestamp: FieldValue.serverTimestamp(),
+      type: 'text'
+    );
+
+    setState(() {
+      isWriting = false;
+    });
+
+    _repository.addMessageToDatabase(_message, sender, widget.receiver);
   }
 }
 

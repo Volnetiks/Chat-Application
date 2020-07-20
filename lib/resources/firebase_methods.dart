@@ -1,3 +1,4 @@
+import 'package:chat_application_backend/models/message.dart';
 import 'package:chat_application_backend/models/user.dart';
 import 'package:chat_application_backend/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -67,6 +68,10 @@ class FirebaseMethods {
       }
     }
     return userList;
+  }
+
+  Future<void> addMessageToDatabase(Message message, User sender, User receiver) async {
+    
   }
 
 }
