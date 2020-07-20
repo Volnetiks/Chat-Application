@@ -108,7 +108,13 @@ class _SearchScreenState extends State<SearchScreen> {
 
         return CustomTile(
           mini: false,
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context, MaterialPageRoute(
+              builder: (context) => ChatScreen(
+                receiver: searchedUser
+              )
+            ));
+          },
           leading: CircleAvatar(
             backgroundImage: NetworkImage(searchedUser.profilePhoto),
             backgroundColor: Colors.grey,
