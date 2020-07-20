@@ -14,10 +14,9 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-
   FirebaseRepository _repository = FirebaseRepository();
 
-  List<User> users;
+  List<User> users = List<User>();
   String query = "";
   TextEditingController searchController = TextEditingController();
 
@@ -29,6 +28,7 @@ class _SearchScreenState extends State<SearchScreen> {
       _repository.fetchAllUsers(user).then((List<User> userList) {
         setState(() {
           users = userList;
+          query = searchController.text;
         });
       });
     });
@@ -37,6 +37,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade900,
       appBar: GradientAppBar(
         gradient: LinearGradient(colors: [Colors.red, Colors.purple]),
         leading: IconButton(
@@ -49,7 +50,7 @@ class _SearchScreenState extends State<SearchScreen> {
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(kToolbarHeight + 20),
           child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: EdgeInsets.symmetric(horizontal: 20),
             child: TextField(
               controller: searchController,
               onChanged: (val) {
@@ -60,77 +61,79 @@ class _SearchScreenState extends State<SearchScreen> {
               cursorColor: Colors.grey,
               autofocus: true,
               style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 35
-              ),
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.close, color: Colors.white),
-                  onPressed: () {
-                    WidgetsBinding.instance.addPostFrameCallback((timeStamp) => searchController.clear());
-                  },
-                ),
-                border: InputBorder.none,
-                hintText: "Search...",
-                hintStyle: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 35,
                   color: Colors.white,
-                )
-              ),
+                  fontSize: 35),
+              decoration: InputDecoration(
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.close, color: Colors.white),
+                    onPressed: () {
+                      WidgetsBinding.instance.addPostFrameCallback(
+                          (timeStamp) => searchController.clear());
+                    },
+                  ),
+                  border: InputBorder.none,
+                  hintText: "Search...",
+                  hintStyle: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 35,
+                    color: Colors.white,
+                  )),
             ),
           ),
         ),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 20),
-        child: buildUsersList(query)
-      ),
+          child: buildUsersList(query)),
     );
   }
 
   buildUsersList(String query) {
-    final List<User> usersList = query.isEmpty ? [] : users.where((User user) {
-      String _getUsername = user.username.toLowerCase();
-      String _getName = user.name.toLowerCase();
-      String _query = query.toLowerCase();
-      return (_getUsername.contains(_query) || _getName.contains(_query));
-    }).toList();
+    final List<User> usersList = query.isEmpty
+        ? []
+        : users.where((User user) {
+            String _getUsername = user.username.toLowerCase();
+            String _getName = user.name.toLowerCase();
+            String _query = query.toLowerCase();
+            return (_getUsername.contains(_query) || _getName.contains(_query));
+          }).toList();
 
     return ListView.builder(
       itemCount: usersList.length,
       itemBuilder: ((context, index) {
         User searchedUser = User(
-          uid: usersList[index].uid,
-          profilePhoto: usersList[index].profilePhoto,
-          name: usersList[index].name,
-          username: usersList[index].username
-        );
+            uid: usersList[index].uid,
+            profilePhoto: usersList[index].profilePhoto,
+            name: usersList[index].name,
+            username: usersList[index].username);
 
-        return CustomTile(
-          mini: false,
+        return GestureDetector(
           onTap: () {
-            Navigator.push(context, MaterialPageRoute(
-              builder: (context) => ChatScreen(
-                receiver: searchedUser
-              )
-            ));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ChatScreen(receiver: searchedUser)));
           },
-          leading: CircleAvatar(
-            backgroundImage: NetworkImage(searchedUser.profilePhoto),
-            backgroundColor: Colors.grey,
-          ),
-          title: Text(
-            searchedUser.username,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold
+          child: Container(
+            color: Colors.grey.shade900,
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            width: double.infinity,
+            child: CustomTile(
+              mini: false,
+              leading: CircleAvatar(
+                backgroundImage: NetworkImage(searchedUser.profilePhoto),
+                backgroundColor: Colors.grey,
+              ),
+              title: Text(
+                searchedUser.username,
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(
+                searchedUser.name,
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
-          ),
-          subtitle: Text(
-            searchedUser.name,
-            style: TextStyle(color: Colors.grey),
           ),
         );
       }),
