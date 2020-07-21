@@ -33,15 +33,12 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   void initState() {
     _repository.getCurrentUser().then((FirebaseUser user) {
-       _userId = user.uid;
+      _userId = user.uid;
 
-       setState(() {
-         sender = User(
-           uid: user.uid,
-           name: user.displayName,
-           profilePhoto: user.photoUrl
-         );
-       });
+      setState(() {
+        sender = User(
+            uid: user.uid, name: user.displayName, profilePhoto: user.photoUrl);
+      });
     });
 
     super.initState();
@@ -73,19 +70,28 @@ class _ChatScreenState extends State<ChatScreen> {
       body: Column(
         children: <Widget>[
           Flexible(
-            child: ListView.builder(
-              padding: EdgeInsets.all(10),
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                return Container(
-                  margin: EdgeInsets.symmetric(vertical: 15),
-                  child: Container(
-                    alignment: Alignment.centerRight,
-                    child: senderLayout(),
-                  ),
+            child: StreamBuilder(
+              stream: Firestore.instance.collection("messages").document(_userId).collection(widget.receiver.uid).orderBy("timestamp", descending: true).snapshots(),
+              builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                if(snapshot.data == null) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                return ListView.builder(
+                  reverse: true,
+                  padding: EdgeInsets.all(10),
+                  itemCount: snapshot.data.documents.length,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      margin: EdgeInsets.symmetric(vertical: 15),
+                      child: Container(
+                        alignment: snapshot.data.documents[index]['senderId'] == _userId ? Alignment.centerRight : Alignment.centerLeft,
+                        child: snapshot.data.documents[index]['senderId'] == _userId ? senderLayout(snapshot.data.documents[index]) : receiverLayout(snapshot.data.documents[index]),
+                      ),
+                    );
+                  }
                 );
               },
-            ),
+            )
           ),
           Container(
             padding: EdgeInsets.all(10),
@@ -220,7 +226,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget senderLayout() {
+  Widget senderLayout(DocumentSnapshot snapshot) {
     Radius messageRadius = Radius.circular(10);
 
     return Container(
@@ -238,7 +244,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Padding(
         padding: EdgeInsets.all(10),
         child: Text(
-          "Hello",
+          snapshot['message'],
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,
@@ -248,7 +254,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Widget receiverLayout() {
+  Widget receiverLayout(DocumentSnapshot snapshot) {
     Radius messageRadius = Radius.circular(10);
 
     return Container(
@@ -266,7 +272,7 @@ class _ChatScreenState extends State<ChatScreen> {
       child: Padding(
         padding: EdgeInsets.all(10),
         child: Text(
-          "Hello",
+          snapshot['message'],
           style: TextStyle(
             color: Colors.white,
             fontSize: 16,
@@ -280,12 +286,11 @@ class _ChatScreenState extends State<ChatScreen> {
     var text = textFieldController.text;
 
     Message _message = Message(
-      receiverId: widget.receiver.uid,
-      senderId: sender.uid,
-      message: text,
-      timestamp: FieldValue.serverTimestamp(),
-      type: 'text'
-    );
+        receiverId: widget.receiver.uid,
+        senderId: sender.uid,
+        message: text,
+        timestamp: FieldValue.serverTimestamp(),
+        type: 'text');
 
     setState(() {
       isWriting = false;
@@ -327,7 +332,8 @@ class ModalTile extends StatelessWidget {
         ),
         title: Text(
           title,
-          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
+          style: TextStyle(
+              fontWeight: FontWeight.bold, color: Colors.white, fontSize: 18),
         ),
       ),
     );

@@ -71,7 +71,19 @@ class FirebaseMethods {
   }
 
   Future<void> addMessageToDatabase(Message message, User sender, User receiver) async {
-    
+    var map = message.toMap();
+
+    await firestore
+        .collection("messages")
+        .document(message.senderId)
+        .collection(message.receiverId)
+        .add(map);
+
+    return await firestore
+        .collection("messages")
+        .document(message.receiverId)
+        .collection(message.senderId)
+        .add(map);
   }
 
 }
